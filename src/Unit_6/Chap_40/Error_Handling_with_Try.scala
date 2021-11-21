@@ -136,7 +136,73 @@ object Error_Handling_with_Try extends App{
   println(k_3)
 
   def findStudent(id:Int):Try[Student] = ???
-  def findStudent(id:String): Try[Student] = Try(id.toInt).flatMap(findStudent(_))
+  def findStudent(id:String): Try[Student] = Try(id.toInt).flatMap(findStudent)
 
+  // Rewriting registerForNextExamSession using for-comprehension
+  def registerForNextExamSession_3(student: Student,
+                                   topic: String) = for{
+    examSession <- getNextExamSession(topic)
+    registration <- register(student, examSession)
+  } yield registration
+  // NB: You can use for-comprehension in place of flatMap and map operations that are chained
+
+  val for_ex = for{
+    n <- Try(1)
+    res <- Try(2/n)
+  } yield res
+  println(for_ex)
+
+  // Rewriting the findStudent(id:String) to use for-comprehension
+  def findStudent_2(id:String): Try[Student] = for{
+    i <- Try(id.toInt)
+    student <- findStudent(i)
+  } yield student
+
+  // A function to check if it was able to find an exam session
+  def examSessionExists(e:Try[ExamSession]): Boolean = e.isSuccess
+
+  // A function to retrieve a selected exam session or to provide a alternative one
+//  val defaultExamSession:ExamSession = ???
+//  def getExamSession(e:Try[ExamSession]): ExamSession = e getOrElse defaultExamSession
+  /*
+    The Try class has some few helper functions: isSuccess, isFailure, getOrElse
+   */
+  println()
+
+  val t_ex1 = Try(5/2).isSuccess
+  println(t_ex1)
+
+  val t_ex2 = Try(5/0).isFailure
+  println(t_ex2)
+
+  println()
+
+  // A function that does not throw an exception when trying to convert toBoolean
+  def toSafeBoolean(text:String): Boolean = {
+    if(Try(text.toBoolean).isSuccess) true
+    else false
+  }
+  def toSafeBooleanAlternative(text:String): Boolean = Try(text.toBoolean).getOrElse(false)
+
+  val test_3 = toSafeBoolean("true")
+  val test_3c = toSafeBoolean("false")
+  val test_3b = toSafeBoolean("rue")
+  println(test_3)
+  println(test_3c)
+  println(test_3b)
+
+  println()
+  case class Person(age:Int,name:String)
+  // A function that takes a text and parses it into a Person instance
+  def stringToPerson(text:String) = {
+    val splitter = text.split(",",2)
+    val left = splitter(0).strip()
+    val right = splitter(1).strip()
+    Try(Person(left.toInt,right).toString) getOrElse("Couldn't parse data")
+  }
+
+  println(stringToPerson("21, Jane Doe"))
+  println(stringToPerson("true, Jane Doe"))
+  println(stringToPerson("Jane Doe,21"))
 
 }
