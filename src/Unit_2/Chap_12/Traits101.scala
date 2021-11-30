@@ -1,4 +1,7 @@
 package Unit_2.Chap_12
+
+import java.util.Currency
+
 /*
   Traits are there because you can't, express multiple inheritance, with
   classes and abstract classes
@@ -69,6 +72,7 @@ class Cat extends Animal{
 class Dog(val name:String) extends Animal with Nameable{
   override def move(x: Int, y: Int): String = s"Let's go to ($x,$y)"
   override def eat(food: String): String = s"$food $food"
+
 }
 
 
@@ -77,6 +81,7 @@ object Clubs extends Suit
 object Diamonds extends Suit
 object Heart extends Suit
 object Spade extends Suit
+
 
 
 sealed trait Currency
@@ -90,12 +95,16 @@ object Traits101 extends App{
   val tiggerTheDog = new Dog("Tigger")
   val newCat = new Cat
 
+
+
+
   def feedTreat(animal:Animal): String = animal.eat("treat")
   feedTreat(tiggerTheDog)
   feedTreat(newCat)
 
   def welcome(nameable:Nameable) = {
     println(s"Hi, ${nameable.name}")
+
   }
 
   welcome(tiggerTheDog) // Does compile

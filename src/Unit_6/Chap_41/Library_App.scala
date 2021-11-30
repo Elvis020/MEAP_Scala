@@ -1,4 +1,4 @@
-package Unit_6
+package Unit_6.Chap_41
 
 /**
  * Project: Scala_with_Daniela
@@ -10,7 +10,7 @@ package Unit_6
  *
  * Happy Coding
  */
-object Library_App extends App{
+object Library_App extends App {
   println("Check Project Library for more information about this chap")
 
 }
